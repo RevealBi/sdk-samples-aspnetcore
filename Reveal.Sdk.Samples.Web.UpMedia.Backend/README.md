@@ -2,7 +2,7 @@
 [![Nuget](https://img.shields.io/nuget/v/Reveal.Sdk.Web.AspNetCore.Trial)](https://www.nuget.org/packages/Reveal.Sdk.Web.AspNetCore.Trial/)
 #### [Website](https://revealbi.io/) | [Docs](https://help.revealbi.io/en/developer/web-sdk/overview.html) | [API Reference](https://help.revealbi.io/api/aspnet/latest/Reveal.Sdk.html)
 
-ℹ️ | This project provides only the backend piece, you can use it along [upmedia-react](https://github.com/RevealBi/sdk-samples-react/tree/main/upmedia-react) for the frontend.
+ℹ️ | This project provides only the backend piece, you can use it along [upmedia-react](https://github.com/RevealBi/sdk-samples-react/tree/main/upmedia-react) or [upmedia-browser](https://github.com/RevealBi/sdk-samples-react/tree/main/upmedia-browser) for the frontend.
 :---: | :---
 ## Usage
 Download the code and run the Reveal.Sdk.Samples.Web.UpMedia.Backend.csproj project.
