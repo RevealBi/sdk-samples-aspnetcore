@@ -41,6 +41,5 @@ namespace Reveal.Sdk.Samples.Web.UpMedia.Backend.Services
         {
             _availableDashboards[name] = dashboard;
         }
-
     }
 }

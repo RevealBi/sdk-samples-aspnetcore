@@ -17,8 +17,10 @@ Register the this service in AspNetCore DI by calling the following snippet in S
 ```c#
 services.AddSingleton<IDashboardService, DashboardService>();
 ```
-2. Creates the [RevealSdkContext](SDK/RevealSdkContext.cs) class. It accepts an IDashboardService argument in it's constructor so could get the service implementation injected. Override the GetDashboardAsync abstract method on top of the DashboardService. Finally register RevealSdkContext in AspNetCore DI by call:
+2. Creates the [DashboardProvider](SDK/DashboardProvider.cs) class. It accepts an IDashboardService argument in it's constructor so could get the service implementation injected. Override the GetDashboardAsync abstract method on top of the DashboardService. Finally add reveal services and register DashboardProvider by doing the following call:
 ```c#
-services.AddRevealServices<RevealSdkContext>(new RevealEmbedSettings());
+services
+    .AddControllers()
+    .AddReveal(builder => builder.AddDashboardProvider<DashboardProvider>());
 ```
 3. Creates a [DashboardsController](Controllers/DashboardsController.cs), which also receives the [IDashboardService](Services/IDashboardService.cs). Mark it with [Route("Dashboards")] to define the route(this is the route [upmedia-react](https://github.com/RevealBi/sdk-samples-react/tree/main/upmedia-react) client sample will be hitting but you could specify a path that suits your needs). Add a method that gets all the available dashboards from the IDashboardService extract DashboardInfo objects out of the Dashboard instances and return them. Mark that method with [HttpGet] attribute.

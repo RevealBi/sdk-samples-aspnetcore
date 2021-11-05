@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reveal.Sdk;
-using Reveal.Sdk.AspNetCore;
 
 namespace CookiesAuth
 {
@@ -22,10 +21,10 @@ namespace CookiesAuth
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddSingleton<IAspNetUserContext, SampleUserContextProvider>() // needs to be done before AddRevealServices
-                .AddRevealServices<SampleRevealSdkContext>(new RevealEmbedSettings())
                 .AddControllersWithViews()
-                .AddReveal();
+                .AddReveal(builder => builder.AddDashboardProvider<DashboardProvider>()
+                                             .AddUserContextProvider<SampleUserContextProvider>()
+                                             .AddAuthenticationProvider<SampleAuthenticationProvider>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

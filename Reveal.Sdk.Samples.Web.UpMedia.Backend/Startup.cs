@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Reveal.Sdk.Samples.Web.UpMedia.Backend.Services;
 using Reveal.Sdk.Samples.Web.UpMedia.Backend.SDK;
-using System.IO;
+using Reveal.Sdk.Samples.Web.UpMedia.Backend.Services;
 using System.IO.Compression;
 
 namespace Reveal.Sdk.Samples.Web.UpMedia.Backend
@@ -40,9 +39,8 @@ namespace Reveal.Sdk.Samples.Web.UpMedia.Backend
 
             services
                 .AddSingleton<IDashboardService, DashboardService>()
-                .AddRevealServices<RevealSdkContext>(new RevealEmbedSettings())
                 .AddControllers()
-                .AddReveal();
+                .AddReveal(builder => builder.AddDashboardProvider<DashboardProvider>());
         }
 
 

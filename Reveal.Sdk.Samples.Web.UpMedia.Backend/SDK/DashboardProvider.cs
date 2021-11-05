@@ -4,16 +4,15 @@ using System.Threading.Tasks;
 
 namespace Reveal.Sdk.Samples.Web.UpMedia.Backend.SDK
 {
-    public class RevealSdkContext : RevealSdkContextBase
+    public class DashboardProvider: IRVDashboardProvider
     {
         readonly IDashboardService _dashboardService;
 
-        public RevealSdkContext(IDashboardService dashboardService)
+        public DashboardProvider(IDashboardService dashboardService)
         {
             _dashboardService = dashboardService;
         }
-
-        public override Task<Dashboard> GetDashboardAsync(string dashboardId)
+        public Task<Dashboard> GetDashboardAsync(IRVUserContext userContext, string dashboardId)
         {
             var dashboards = _dashboardService.GetAvailableDashboards();
 
@@ -21,7 +20,7 @@ namespace Reveal.Sdk.Samples.Web.UpMedia.Backend.SDK
             return Task.FromResult(result);
         }
 
-        public override Task SaveDashboardAsync(string userId, string dashboardId, Dashboard dashboard)
+        public Task SaveDashboardAsync(IRVUserContext userContext, string dashboardId, Dashboard dashboard)
         {
             throw new NotImplementedException();
         }

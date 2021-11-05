@@ -1,15 +1,12 @@
 ﻿using Reveal.Sdk;
-using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace CookiesAuth.Reveal
 {
-    public class SampleRevealSdkContext : RevealSdkContextBase
+    public class DashboardProvider :IRVDashboardProvider
     {
-        public override IRVAuthenticationProvider AuthenticationProvider { get; } = new SampleAuthenticationProvider();
-
-        public override Task<Dashboard> GetDashboardAsync(string dashboardId)
+        public Task<Dashboard> GetDashboardAsync(IRVUserContext userContext, string dashboardId)
         {
             var resourceName = $"CookiesAuth.Dashboards.{dashboardId}.rdash";
 
@@ -20,7 +17,7 @@ namespace CookiesAuth.Reveal
             return Task.FromResult(dashboard);
         }
 
-        public override Task SaveDashboardAsync(string userId, string dashboardId, Dashboard dashboard)
+        public Task SaveDashboardAsync(IRVUserContext userContext, string dashboardId, Dashboard dashboard)
         {
             //return complated task if save occurs
             return Task.CompletedTask;

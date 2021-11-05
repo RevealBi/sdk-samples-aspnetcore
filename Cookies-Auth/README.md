@@ -25,19 +25,19 @@ To keep things simple for this sample, we'll use a sample "samplesessionheader" 
 ### Storing the value for a header in the user context
 In [SampleUserContextProvider](Reveal/SampleUserContextProvider.cs) you can see we're creating a sample header and cookie. In your application you might need to use a cookie or an authentication header.
 
-_SampleUserContextProvider_ inherits from _RVBaseUserContextProvider_ and overrides the _GetUserContext_ method that returns a _RVUserContext_ object, which contains both the userId and a set of properties.
+_SampleUserContextProvider_ implements _IRVUserContextProvider_ interface and defines the _GetUserContext_ method that returns a _RVUserContext_ object, which contains both the userId and a set of properties.
 We're using this list of properties to store the samplesessionheader, this way we can retrieve it later when credentials for a data source are requested.
 
 ```c#
-internal class SampleUserContextProvider : RVBaseUserContextProvider
+internal class SampleUserContextProvider : IRVUserContextProvider
 {
-    protected override RVUserContext GetUserContext(HttpContext aspnetContext)
+    public IRVUserContext GetUserContext(HttpContext aspnetContext)
     {
         //we don't have a real authentication in this sample, so we're just hard-coding "guest" as the user here
         //when using standard auth mechanisms, the userId can be obtained using something like aspnetContext.User.Identity.Name.
         string userId = "guest";
 
-        //RVUserContext allows to store properties in addition to the userId, these properties can be used later
+        //RVUserContext is a default implementation of IRVUserContext, which allows to store properties in addition to the userId, these properties can be used later
         //for example in the authentication provider. You could store data related to the current request this way. In this case, we're just storing a sample header data.
         return new RVUserContext(
             userId,
@@ -47,7 +47,7 @@ internal class SampleUserContextProvider : RVBaseUserContextProvider
 ```
 
 ### Retrieving the header value from the user context
-In [SampleAuthenticationProvider](Reveal/SampleAuthenticationProvider.cs) we're inheriting from _RVBaseAuthenticationProvider_, that takes care of passing a _RVUserContext_ to _ResolveCredentialsAsync_.
+In [SampleAuthenticationProvider](Reveal/SampleAuthenticationProvider.cs) we're implementing _IRVAuthenticationProvider_ interface, which takes care of passing a _RVUserContext_ to _ResolveCredentialsAsync_.
 We're using that _RVUserContext_ object to get the "samplesessionheader" property we installed in _SampleUserContextProvider_.
 
 In this case our data source is a REST API data source, and we want to pass some header/cookies as the credentials for it, including the samplesessionheader header, so we need to return a _RVHeadersDataSourceCredentials_ object. This class can be used to pass authentication credentials object only for REST or Web Resource data sources.
@@ -55,16 +55,16 @@ In this case our data source is a REST API data source, and we want to pass some
 As _RVHeadersDataSourceCredentials_ is constructed with one or more headers, we want to create the "Cookie" header to be sent as well. Here we're adding the samplesessionheader to the request along with a test cookie.
 
 ```c#
-internal class SampleAuthenticationProvider : RVBaseAuthenticationProvider
+internal class SampleAuthenticationProvider : IRVAuthenticationProvider
 {
-    protected override Task<IRVDataSourceCredential> ResolveCredentialsAsync(RVUserContext userContext, RVDashboardDataSource dataSource)
+    public Task<IRVDataSourceCredential> ResolveCredentialsAsync(IRVUserContext userContext, RVDashboardDataSource dataSource)
     {
         if (dataSource is RVRESTDataSource)
         {
             //get the session sampleSessionHeader value
             string sessionHeader = (string)userContext.Properties.GetValueOrDefault("samplesessionheader");
 
-            //pass a fixed cookie just for testing purposes and the sessionsesionHeader we stored in the SampleUserContextProvider
+            //pass a fixed cookie just for testing purposes and the sessionSesionHeader we stored in the SampleUserContextProvider
             string cookies = $"testCookie1=testValue";
 
             return Task.FromResult<IRVDataSourceCredential>(new RVHeadersDataSourceCredentials(
@@ -72,7 +72,7 @@ internal class SampleAuthenticationProvider : RVBaseAuthenticationProvider
                 {
                     { "userId", userContext.UserId },
                     { "cookie", cookies},
-                    { "sampleSessionHeader", (string)sessionHeader}
+                    { "sampleSessionHeader", sessionHeader}
                 }));
         }
         return null;

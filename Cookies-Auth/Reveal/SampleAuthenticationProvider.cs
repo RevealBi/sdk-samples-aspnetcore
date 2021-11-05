@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace CookiesAuth.Reveal
 {
-    internal class SampleAuthenticationProvider : RVBaseAuthenticationProvider
+    internal class SampleAuthenticationProvider : IRVAuthenticationProvider
     {
-        protected override Task<IRVDataSourceCredential> ResolveCredentialsAsync(RVUserContext userContext, RVDashboardDataSource dataSource)
+        public Task<IRVDataSourceCredential> ResolveCredentialsAsync(IRVUserContext userContext, RVDashboardDataSource dataSource)
         {
             if (dataSource is RVRESTDataSource)
             {
