@@ -4,14 +4,13 @@
     ViewData["Title"] = "Home page";
 }
 
-<div id="revealView" style="height: 500px; width: 100%;"></div>
+<div id="revealView" style="height: 800px; width: 100%;"></div>
 
 @section Scripts
 {
     <script type="text/javascript">
         $.ig.RevealSdkSettings.ensureFontsLoadedAsync().then(() => {
             var revealView = new $.ig.RevealView("#revealView");
-            revealView.dashboard = new $.ig.RVDashboard();
         });        
     </script>
 }
