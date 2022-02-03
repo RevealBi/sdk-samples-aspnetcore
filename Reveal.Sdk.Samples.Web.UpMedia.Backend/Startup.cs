@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Reveal.Sdk.Samples.Web.UpMedia.Backend.SDK;
 using Reveal.Sdk.Samples.Web.UpMedia.Backend.Services;
 using System.IO.Compression;
@@ -21,6 +22,11 @@ namespace Reveal.Sdk.Samples.Web.UpMedia.Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reveal.Sdk.Samples.Web.UpMedia.Backend", Version = "v1" });
+            });
+
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
             services.AddResponseCompression(options =>
             {
@@ -50,6 +56,8 @@ namespace Reveal.Sdk.Samples.Web.UpMedia.Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reveal.Sdk.Samples.Web.UpMedia.Backend v1"));
             }
             else
             {

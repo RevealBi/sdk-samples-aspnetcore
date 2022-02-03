@@ -8,24 +8,15 @@
 @section Scripts
     {
     <script type="text/javascript">
-        WebFont.load({
-            custom: {
-                families: ['Roboto-Regular', 'Roboto-Bold', 'Roboto-Medium', 'Roboto-Light']
-            },
-            active: function () {
-                renderDashboard();
-            },
-        });
+        async function renderDashboard(){
+            await $.ig.RevealSdkSettings.ensureFontsLoadedAsync();
 
-        function renderDashboard() {
-            var dashboardId = "HeadersAndCookies";
-            $.ig.RVDashboard
-                .loadDashboardAsync(dashboardId)
-                .then(dashboard => {
-                    var revealView = new $.ig.RevealView("#revealView");
-                    revealView.dashboard = dashboard;
-                })
-                .catch(error => console.error(error));
+            let dashboardId = "HeadersAndCookies";
+            let dashboard = await $.ig.RVDashboard.loadDashboardAsync(dashboardId);
+
+            let revealView = new $.ig.RevealView("#revealView");
+            revealView.dashboard = dashboard;
         }
+        renderDashboard().catch(error => console.error(error))
     </script>
 }
